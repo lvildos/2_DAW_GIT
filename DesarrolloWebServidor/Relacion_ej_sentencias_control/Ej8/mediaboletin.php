@@ -21,18 +21,19 @@ notable o sobresaliente). -->
     echo "Ninguna nota puede ser menor que 0.";
   } else {
     $medianotas = ($nota1 + $nota2 + $nota3) / 3;
-    echo "La media de las notas es " . $medianotas;
+    $medianotas = round($medianotas, 0, PHP_ROUND_HALF_UP);
+    echo "La media de las notas es " . $medianotas . ". <br>";
 
     if ($medianotas < 5) {
-      echo " La nota final es 'Insuficiente'";
+      echo " La nota final es 'Insuficiente'.";
     } elseif ($medianotas == 5) {
-      echo " La nota final es 'Suficiente'";
+      echo " La nota final es 'Suficiente'.";
     } elseif ($medianotas == 6) {
-      echo " La nota final es 'Bien'";
+      echo " La nota final es 'Bien'.";
     } elseif ($medianotas == 7 || $medianotas == 8) {
-      echo " La nota final es 'Notable'";
+      echo " La nota final es 'Notable'.";
     } elseif ($medianotas == 9 || $medianotas == 10) {
-      echo " La nota final es 'Sobresaliente'";
+      echo " La nota final es 'Sobresaliente'.";
     }
 
   }
