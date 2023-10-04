@@ -12,7 +12,7 @@ deben introducir por teclado.
   <title>Document</title>
 </head>
 <body>
-Introduzca la hora para saber el tramo horario. Introduzcala sin los minutos. <br>
+Introduzca la hora para saber el tramo horario. Introduzcala los minutos. <br>
   <form action="hora.php" method="get">
     <input type="number" name="num">
     <input type="submit" value="Enviar">
