@@ -1,20 +1,25 @@
 #!/bin/bash
 
+
+#STEP 1
+
 # Crear usuario Tomcat
 sudo useradd -m -d /opt/tomcat -U -s /bin/false tomcat
 
-# refrescar la memoria caché del gestor de paquetes y realizar la instalación del Kit de Desarrollo de Java (JDK).
+# Refrescar la memoria caché del gestor de paquetes y realizar la instalación del Kit de Desarrollo de Java (JDK).
 sudo apt update
 sudo apt install -y openjdk-17-jdk
 
 # Descargar e instalar Tomcat
-VersionDelTomcat="10.1.18"
-sudo wget https://dlcdn.apache.org/tomcat/tomcat-10/v${VersionDelTomcat}/bin/apache-tomcat-${VersionDelTomcat}.tar.gz -P /tmp
-sudo tar xzvf /tmp/apache-tomcat-${VersionDelTomcat}.tar.gz -C /opt/tomcat --strip-components=1
+Version="10.1.18"
+sudo wget https://dlcdn.apache.org/tomcat/tomcat-10/v${Version}/bin/apache-tomcat-${Version}.tar.gz -P /tmp
+sudo tar xzvf /tmp/apache-tomcat-${Version}.tar.gz -C /opt/tomcat --strip-components=1
 
 # Configuramos los permisos
 sudo chown -R tomcat:tomcat /opt/tomcat/
 sudo chmod -R u+x /opt/tomcat/bin
+
+#STEP 2
 
 # Configurar usuarios administradores en tomcat-users.xml
 cat <<EOF | sudo tee -a /opt/tomcat/conf/tomcat-users.xml
@@ -33,6 +38,8 @@ sudo sed -i '/<Valve/,/<\/Valve>/ s/^/<!-- /; s/$/ -->/' "$archivo"
 # Eliminar restricciones a los administradores en host-manager/context.xml
 archivo="/opt/tomcat/webapps/host-manager/META-INF/context.xml"
 sudo sed -i '/<Valve/,/<\/Valve>/ s/^/<!-- /; s/$/ -->/' "$archivo"
+
+#STEP 3
 
 # Capturar la ruta del archivo a partir de sudo update-java-alternatives -l y almacenarla en java_home
 java_home=$(sudo update-java-alternatives -l | awk '{print $3}')
@@ -66,14 +73,12 @@ Restart=always
 WantedBy=multi-user.target
 EOF
 
-# Recargar
+# Recargamos, reiniciamos, permitimos que se inicie con el sistema y permitimos el tráfico al puerto 8080
 sudo systemctl daemon-reload
-
-# Reiniciar
 sudo systemctl start tomcat
-
-# Permitir que Tomcat se inicie con el sistema
 sudo systemctl enable tomcat
 
-# Permitir tráfico al puerto 8080
+#STEP 4
+
+
 sudo ufw allow 8080
